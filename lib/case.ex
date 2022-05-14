@@ -26,8 +26,14 @@ defmodule CodeFlow.Case do
     end
   end
 
-  def read_file(_filename) do
-
+  def read_file(filename) do
+    result = File.read(filename)
+    case result do
+      {:ok, file_contents} -> 
+        {:ok, file_contents}
+      {:error, :enoent} ->
+        {:error, "File not found"} 
+    end
   end
 
   def find_user(_user_id) do
