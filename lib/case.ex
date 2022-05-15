@@ -36,7 +36,13 @@ defmodule CodeFlow.Case do
     end
   end
 
-  def find_user(_user_id) do
-
+  def find_user(user_id) do
+    user_returned = Users.one(user_id)
+    case user_returned do
+      %User{id: id} ->
+        {:ok, user_returned}
+      _ ->
+        {:error, "User not found"}
+    end
   end
 end
