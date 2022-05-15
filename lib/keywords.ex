@@ -13,7 +13,7 @@ defmodule CodeFlow.Keywords do
   # alias CodeFlow.Schemas.Item
 
   def rounded(value, opts \\ []) do
-    round_decimal = Keyword.get(opts, :decimals, 4)
+    round_decimal = Keyword.get(opts, :decimals) || 4
     Float.round(value, round_decimal)
   end
 
