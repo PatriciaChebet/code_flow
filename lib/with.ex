@@ -18,28 +18,17 @@ defmodule CodeFlow.With do
   @spec place_new_order(customer_id :: integer, item_id :: integer, quantity :: integer) ::
           {:ok, Order.t()} | {:error, String.t()}
   def place_new_order(customer_id, item_id, quantity) do
-    with {:customer, {:ok, customer}} <- {:customer, Customers.find(customer_id)},
-         {:item, {:ok, item}} <- {:item, Items.find(item_id)},
-         {:new_order, {:ok, %Order{} = new_order}} <- {:new_order, Orders.new(customer)},
-         {:added_item, {:ok, updated_order}} <- {:added_item, Orders.add_item(new_order, item, quantity)},
-         {:notified_customer, :ok} <- {:notified_customer, Customers.notify(customer, new_order, {:order_placed, new_order})} do
-           {:ok, new_order}
-        else 
-          {:customer, :error} -> 
-            {:error, "Customer not found"}
-          {:item, :error} ->
-            {:error, "Item not found"}
-          {:new_order, :error} ->
-            {:error, "Cannot create order for inactive customer"}
-          {:added_item, :error} ->
-            {:error, "Cannot order an inactive item"}
-          {:notified_customer, :error} ->
-            case :error do
-              :timeout ->
-                {:error, "Timed out attempting to notify customer"}
-              nil -> 
-                {:error, "Customer contact email missing"}
-            end
+    with {:ok, customer} <- Customers.find(customer_id),
+         {:ok, item} <- Items.find(item_id),
+         {:ok, order}<- Orders.new(customer),
+         {:ok, order} <- Orders.add_item(order, item, quantity),
+         :ok <- Customers.notify(customer,  {:order_placed, order}) do
+           {:ok, order}
+    else
+      {:error, :timeout} ->
+        {:error, "Timed out attempting to notify customer"}
+      error ->
+        error
+    end
   end
-end
 end
