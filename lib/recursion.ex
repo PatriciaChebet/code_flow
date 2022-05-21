@@ -53,9 +53,19 @@ defmodule CodeFlow.Recursion do
   Create the desired number of customers. Provide the number of customers to
   create. Something like this could be used in a testing setup.
   """
-  def create_customers(_number) do
-
+  def create_customers(number) do
+    create_spec_customers(number, 0)
   end
+
+  defp create_spec_customers(total, num) when num < total do
+    {:ok, _customer} = Customers.create(%{name: "Customer #{num}"})
+    create_spec_customers(total, num + 1)
+  end
+
+  defp create_spec_customers(total, _num) do
+    "Created #{total} customers!"
+  end
+  
 
   @doc """
   Compute the value in the Fibonacci sequence for the number. If the number is
