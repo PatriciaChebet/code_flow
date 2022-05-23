@@ -14,15 +14,20 @@ defmodule CodeFlow.EnumShortcut do
   alias CodeFlow.Schemas.Customer
   # alias CodeFlow.Schemas.OrderItem
 
-  # alias CodeFlow.Fake.Customers
-  # alias CodeFlow.Schemas.OrderItem
+  alias CodeFlow.Fake.Customers
+  alias CodeFlow.Schemas.OrderItem
 
   @doc """
   Create the desired number of customers. Provide the number of customers to
   create. Something like this could be used in a testing setup.
   """
-  def create_customers(_number) do
 
+  def create_customers(0), do: :ok
+  
+  def create_customers(number) do
+    Enum.each(1..number, fn(number) ->
+      {:ok, customer} = Customers.create(%{name: "customer number #{number}"})
+    end)
   end
 
   @doc """
@@ -41,3 +46,5 @@ defmodule CodeFlow.EnumShortcut do
 
   end
 end
+
+
