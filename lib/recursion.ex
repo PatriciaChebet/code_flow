@@ -73,7 +73,12 @@ defmodule CodeFlow.Recursion do
   sequence.
   https://en.wikipedia.org/wiki/Fibonacci_number
   """
-  def fibonacci(_num) do
+  def fibonacci(1), do: 1
+  
+  def fibonacci(0), do: 0
 
+  def fibonacci(num) do
+    fibonacci(num - 1)  + fibonacci(num - 2)
   end
+
 end
