@@ -12,8 +12,10 @@ defmodule CodeFlow.Comprehension do
   """
   alias CodeFlow.Schemas.User
 
-  def award_unfair_points(_users, _points) do
-
+  def award_unfair_points(users, points) do
+    for person when person.active == true <- users, String.contains?(person.name, "uc") do
+      %User{person | points: person.points + points}
+    end
   end
 
   def build_chessboard() do
