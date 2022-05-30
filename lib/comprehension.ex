@@ -25,7 +25,10 @@ defmodule CodeFlow.Comprehension do
         end
   end
 
-  def team_points(_users) do
-
+  def team_points(users) do
+    for person when person.active == true <- users, reduce: 0 do
+      sum ->
+        sum + person.points
+    end
   end
 end
