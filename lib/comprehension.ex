@@ -19,7 +19,10 @@ defmodule CodeFlow.Comprehension do
   end
 
   def build_chessboard() do
-
+    for row <- 1..8, col <- ["a", "b", "c", "d", "e", "f", "g", "h"]  do 
+          IO.inspect("#{col}#{row}")
+          %{col: col, row: row, name: "#{col}#{row}"}
+        end
   end
 
   def team_points(_users) do
